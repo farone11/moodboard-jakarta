@@ -12,32 +12,44 @@ export async function POST(req: Request) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile", // UPGRADE: Model 70B, jauh lebih pinter
-        temperature: 0.5, // TURUNIN: Biar nggak ngarang
+        model: "llama-3.3-70b-versatile",
+        temperature: 0.2, // Makin nurut
         response_format: { type: "json_object" },
         messages: [{
           role: "system",
-          content: `Kamu adalah Senior Creative Director di agensi Jakarta. Ahli color theory, F&B Jakarta, dan musik Indonesia. Tugasmu mengubah brief user jadi moodboard JSON profesional. JANGAN PERNAH PAKAI KATA "Tempat 1", "Tempat 2". Harus nama tempat real.`
+          content: `Kamu Senior Creative Director + Jakarta City Guide. Output JSON only. Data harus akurat. DILARANG HALU NAMA TEMPAT.`
         }, {
           role: "user",
-          content: `BRIEF: "${mood}"
+          content: `
+BRIEF USER: "${mood}"
 
-OUTPUT HARUS JSON DENGAN FORMAT INI. TIDAK BOLEH MELENCENG:
+OUTPUT JSON WAJIB STRUKTUR INI:
 {
   "colors": ["#HEX", "#HEX", "#HEX"],
-  "spots": ["Nama Tempat Asli - Area", "Nama Tempat Asli - Area", "Nama Tempat Asli - Area"],
-  "song": "Judul - Artis",
-  "reason": "1 kalimat kenapa cocok sama brief"
+  "background_gradient": "linear-gradient(135deg, #HEX 0%, #HEX 100%)",
+  "spots": [
+    {
+      "name": "Nama Tempat Real",
+      "area": "Area di Jakarta",
+      "description": "1 kalimat kenapa tempat ini cocok sama brief. Sebutin vibe/signature-nya.",
+      "gmaps_url": "https://maps.google.com/?q=Nama+Tempat+Jakarta",
+      "photo_url": "URL foto public dari Unsplash/Pexels yang mirip vibes tempat itu. Keyword: cafe jakarta, rooftop, dll"
+    },
+    {... 2 spot lagi... }
+  ],
+  "song": "Judul - Artis Indonesia",
+  "reason": "1-2 kalimat rangkuman moodboard ini"
 }
 
 ATURAN KERAS:
-1. "spots": WAJIB nama cafe/restoran/bar real di Jakarta. Cek Google Maps di kepala lu. Jika user sebut "Grand Indonesia", cari tempat di GI. Contoh: "Social House - Grand Indonesia", "Hause Rooftop - Grand Indonesia", "Plaza Indonesia Entertainment Xenter - Thamrin".
-2. DILARANG KERAS nulis "Tempat 1 - Jaksel". Kalo lu nulis itu, lu dipecat.
-3. "colors": Ambil dari brand atau suasana tempat. GI = mewah, gold/navy. Cikini = vintage, terracotta.
-4. "song": Lagu Indonesia yang relevan sama lokasi/vibe. GI = lagu city pop/modern.
-5. "reason": Jelaskan singkat.
+1. "spots": WAJIB 3 tempat REAL di Jakarta. Jika brief "grand indonesia", cari di GI/Thamrin. Contoh: Social House, Hause Rooftop, SKYE.
+2. "gmaps_url": Harus link Google Maps beneran. Format: https://maps.google.com/?q=Nama+Tempat+Jakarta
+3. "photo_url": Kasih link gambar dari Unsplash. Format: https://images.unsplash.com/photo-xxxx. Keyword harus relevan: "grand indonesia rooftop", "cikini vintage cafe".
+4. "description": Bukan template. Harus spesifik. Contoh: "Rooftop bar di lantai 56 dengan view Bundaran HI, cocok buat sunset date."
+5. "background_gradient": Bikin dari 2 warna di "colors" biar nyambung.
+6. HARAM nulis "Tempat 1". Kalo ngelanggar, output lu sampah.
 
-BRIEF: "${mood}"`
+PROSES BRIEF: "${mood}"`
         }]
       })
     });
