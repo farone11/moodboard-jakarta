@@ -13,11 +13,11 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
-        temperature: 0.2, // Makin nurut
+        temperature: 0.2,
         response_format: { type: "json_object" },
         messages: [{
           role: "system",
-          content: `Kamu Senior Creative Director + Jakarta City Guide. Output JSON only. Data harus akurat. DILARANG HALU NAMA TEMPAT.`
+          content: `Kamu Senior Creative Director + Jakarta City Guide. Output JSON only. DILARANG HALU NAMA TEMPAT.`
         }, {
           role: "user",
           content: `
@@ -26,14 +26,15 @@ BRIEF USER: "${mood}"
 OUTPUT JSON WAJIB STRUKTUR INI:
 {
   "colors": ["#HEX", "#HEX", "#HEX"],
-  "background_gradient": "linear-gradient(135deg, #HEX 0%, #HEX 100%)",
+  "vibe_tags": ["#Elegant", "#RamahKantong", "#Instagramable"],
+  "budget_level": "💰💰 - Rp 100-250rb / orang",
   "spots": [
     {
       "name": "Nama Tempat Real",
       "area": "Area di Jakarta",
-      "description": "1 kalimat kenapa tempat ini cocok sama brief. Sebutin vibe/signature-nya.",
+      "description": "1 kalimat kenapa tempat ini cocok sama brief.",
       "gmaps_url": "https://maps.google.com/?q=Nama+Tempat+Jakarta",
-      "photo_url": "URL foto public dari Unsplash/Pexels yang mirip vibes tempat itu. Keyword: cafe jakarta, rooftop, dll"
+      "photo_url": "https://images.unsplash.com/photo-xxxx?q=80&w=800"
     },
     {... 2 spot lagi... }
   ],
@@ -41,13 +42,11 @@ OUTPUT JSON WAJIB STRUKTUR INI:
   "reason": "1-2 kalimat rangkuman moodboard ini"
 }
 
-ATURAN KERAS:
-1. "spots": WAJIB 3 tempat REAL di Jakarta. Jika brief "grand indonesia", cari di GI/Thamrin. Contoh: Social House, Hause Rooftop, SKYE.
-2. "gmaps_url": Harus link Google Maps beneran. Format: https://maps.google.com/?q=Nama+Tempat+Jakarta
-3. "photo_url": Kasih link gambar dari Unsplash. Format: https://images.unsplash.com/photo-xxxx. Keyword harus relevan: "grand indonesia rooftop", "cikini vintage cafe".
-4. "description": Bukan template. Harus spesifik. Contoh: "Rooftop bar di lantai 56 dengan view Bundaran HI, cocok buat sunset date."
-5. "background_gradient": Bikin dari 2 warna di "colors" biar nyambung.
-6. HARAM nulis "Tempat 1". Kalo ngelanggar, output lu sampah.
+ATURAN:
+1. "vibe_tags": 3 hashtag yg ngegambarin mood. Contoh: #Mewah, #Cozy, #Nongkrong.
+2. "budget_level": Kasih range harga. 💰 = <50rb, 💰💰 = 50-150rb, 💰💰💰 = 150-300rb, 💰💰💰💰 = >300rb /orang.
+3. "spots": WAJIB 3 tempat REAL di Jakarta. HARAM "Tempat 1".
+4. "photo_url": Pake Unsplash. Kalo bingung pake ini: https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800
 
 PROSES BRIEF: "${mood}"`
         }]
