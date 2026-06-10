@@ -6,19 +6,17 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
 
-  // LIST SEMUA FOTO JAKARTA. MASUKIN LINK LU DI SINI
   const jakartaPhotos = [
-    "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=2071&auto=format&fit=crop", // Bundaran HI Malam
-    "https://images.unsplash.com/photo-1555899434-94d1369418af?q=80&w=2070&auto=format&fit=crop", // Monas Siang
-    "https://images.unsplash.com/photo-1621398132274-09493f0a2273?q=80&w=2070&auto=format&fit=crop", // SCBD Golden Hour
-    "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=2070&auto=format&fit=crop", // Kota Tua
-    "https://images.unsplash.com/photo-1570168007204-dfb531cba85f?q=80&w=1974&auto=format&fit=crop", // JPO Sudirman
+    "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?q=80&w=2071&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1555899434-94d1369418af?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1621398132274-09493f0a2273?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=2070&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1570168007204-dfb531cba85f?q=80&w=1974&auto=format&fit=crop",
   ];
 
   const [bgImage, setBgImage] = useState(jakartaPhotos[0]);
   const fallbackImg = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop";
 
-  // PAS PERTAMA BUKA WEB, LANGSUNG RANDOM BG
   useEffect(() => {
     changeBackground();
   }, []);
@@ -27,7 +25,7 @@ export default function Home() {
     let newBg;
     do {
       newBg = jakartaPhotos[Math.floor(Math.random() * jakartaPhotos.length)];
-    } while (newBg === bgImage && jakartaPhotos.length > 1); // ANTI SAMA 2X BERTURUT
+    } while (newBg === bgImage && jakartaPhotos.length > 1);
     setBgImage(newBg);
   };
 
@@ -35,7 +33,7 @@ export default function Home() {
     if (!mood) return alert('Isi mood dulu bang');
     setLoading(true);
     setResult(null);
-    changeBackground(); // GANTI BG TIAP KLIK GENERATE
+    changeBackground();
 
     try {
       const res = await fetch('/api/generate', {
@@ -54,13 +52,16 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen text-white flex flex-col items-center p-4 relative">
-      {/* BACKGROUND GACHA JAKARTA */}
-      <div
-        className="fixed inset-0 z-0 bg-cover bg-center transition-all duration-1000 ease-in-out"
-        style={{ backgroundImage: `url(${bgImage})` }}
+    <main className="min-h-screen text-white flex flex-col items-center p-4 relative overflow-hidden">
+      {/* FIX: PAKE IMG BIAR PASTI MUNCUL */}
+      <img
+        src={bgImage}
+        alt="Jakarta Background"
+        className="fixed top-0 left-0 w-full h-full object-cover -z-10 transition-opacity duration-1000"
+        onError={(e) => { e.currentTarget.src = fallbackImg }}
       />
-      <div className="fixed inset-0 z-0 bg-black/70 backdrop-blur-[2px]" />
+      {/* OVERLAY */}
+      <div className="fixed inset-0 bg-black/70 backdrop-blur-[2px] -z-10" />
 
       <div className="w-full max-w-5xl flex flex-col flex-grow z-10">
         <h1 className="text-4xl md:text-6xl font-bold mb-2 text-center drop-shadow-lg">MoodBoard AI Jakarta</h1>
@@ -148,7 +149,7 @@ export default function Home() {
 
       <style jsx>{`
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-      .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
+     .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
       `}</style>
     </main>
   );
