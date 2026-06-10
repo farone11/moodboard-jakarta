@@ -26,14 +26,21 @@ export default function Home() {
     }
   };
 
-  const fallbackImg = "https://images.unsplash.com/photo-1559339352-11d03564f473?q=80&w=1974&auto=format&fit=crop"; // Foto cafe generik
+  // Foto background Jakarta. Ganti sesuka lu
+  const bgIndonesia = "https://images.unsplash.com/photo-1555899434-94d1369418af?q=80&w=2070&auto=format&fit=crop"; // Monas
+  const fallbackImg = "https://images.unsplash.com/photo-1559339352-11d03564f473?q=80&w=1974&auto=format&fit=crop"; // Cafe generik
 
   return (
-    <main
-      className="min-h-screen text-white flex flex-col items-center p-4 transition-all duration-1000"
-      style={{ background: result?.background_gradient || '#000' }}
-    >
-      <div className="w-full max-w-5xl flex flex-col flex-grow">
+    <main className="min-h-screen text-white flex flex-col items-center p-4 relative">
+      {/* BACKGROUND FOTO INDONESIA */}
+      <div 
+        className="fixed inset-0 z-0 bg-cover bg-center transition-all duration-1000" 
+        style={{ backgroundImage: `url(${bgIndonesia})` }}
+      />
+      {/* OVERLAY GELAP BIAR TEKS KEBACA */}
+      <div className="fixed inset-0 z-0 bg-black/60 backdrop-blur-sm" />
+
+      <div className="w-full max-w-5xl flex flex-col flex-grow z-10">
         <h1 className="text-4xl md:text-6xl font-bold mb-2 text-center drop-shadow-lg">MoodBoard AI Jakarta</h1>
         <p className="text-gray-200 mb-8 text-center">Ketik mood kamu, dapetin spot + foto + maps Jakarta</p>
 
@@ -42,7 +49,7 @@ export default function Home() {
             value={mood}
             onChange={(e) => setMood(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
-            placeholder="grand indonesia buat meeting klien"
+            placeholder="makan bakmie ayam"
             className="flex-1 p-4 rounded-lg bg-black/30 border border-white/20 backdrop-blur-md"
           />
           <button
@@ -58,18 +65,18 @@ export default function Home() {
           <div className="space-y-8 animate-fadeIn flex-grow">
             <div className="flex gap-4 justify-center">
               {result.colors.map((c: string) => (
-                <div key={c} onClick={() => navigator.clipboard.writeText(c)} title={`Copy ${c}`} className="w-20 h-20 rounded-lg cursor-pointer shadow-lg border-2 border-white/20 hover:scale-105 transition" style={{ backgroundColor: c }} />
+                <div key={c} onClick={() => navigator.clipboard.writeText(c)} title={`Copy ${c}`} className="w-20 h-20 rounded-lg cursor-pointer shadow-lg border-2 border-white/30 hover:scale-105 transition" style={{ backgroundColor: c }} />
               ))}
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
               {result.spots.map((spot: any, i: number) => (
-                <div key={i} className="bg-black/40 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 flex flex-col">
+                <div key={i} className="bg-black/50 backdrop-blur-md rounded-xl overflow-hidden border border-white/20 flex flex-col">
                   <img 
                     src={spot.photo_url} 
                     alt={spot.name} 
                     className="w-full h-48 object-cover" 
-                    onError={(e) => { e.currentTarget.src = fallbackImg }} // FIX: Kalo foto 404, ganti foto cadangan
+                    onError={(e) => { e.currentTarget.src = fallbackImg }}
                   />
                   <div className="p-5 flex flex-col flex-grow">
                     <h3 className="font-bold text-xl leading-tight">{spot.name}</h3>
@@ -83,7 +90,7 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="bg-black/40 backdrop-blur-md rounded-xl p-6 border border-white/10 text-center">
+            <div className="bg-black/50 backdrop-blur-md rounded-xl p-6 border border-white/20 text-center">
               <p className="text-sm text-gray-300">Lagu yang cocok:</p>
               <p className="text-2xl font-bold">{result.song}</p>
               <p className="text-gray-300 mt-4 italic">"{result.reason}"</p>
@@ -91,9 +98,9 @@ export default function Home() {
           </div>
         )}
         
-        {/* FOOTER + AUTHOR */}
-        <footer className="w-full mt-auto pt-12 text-center text-sm text-white/60">
-          <p>Created by <b className="text-white/90">Setiawan F</b></p>
+        {/* FOOTER AUTHOR - DIJAMIN MUNCUL */}
+        <footer className="w-full mt-auto pt-12 pb-4 text-center text-sm text-white/70">
+          <p>Created by <b className="text-white">Setiawan F</b></p>
           <p className="mt-1">Moodboard ini dibuat AI. Hasil tempat & foto bisa aja ngaco. Cek lagi sebelum berangkat.</p>
         </footer>
       </div>
